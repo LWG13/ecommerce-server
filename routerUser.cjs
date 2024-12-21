@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt")
 const genAuthToken = require("./jwt.cjs")
 const nodemailer = require("nodemailer")
 const otpGenerator = require('otp-generator')
+const modelProduct = require("./model.cjs")
 const { ObjectId } = require('mongodb');
 const otpSchema = new mongoose.Schema({
     otp: String,
@@ -97,6 +98,13 @@ userRouter.put("/signup/:_id", async (req, res) => {
   const salt = await bcrypt.genSalt(10)
 
    const hashPassword = await bcrypt.hash(req.body.password, salt)
+     const product = await modelProduct.findByIdAndUpdate({userId: req.body._id}, {
+       $set: {
+         username: req.body.username,
+         userImage: uploaded.url,
+       }
+     })
+     console.log(product)
      const user1 = await modelUser.findOneAndUpdate(
        {_id: req.body._id},
       {
@@ -120,8 +128,10 @@ userRouter.put("/signup/:_id", async (req, res) => {
        user._id = req.body._id
   const token = genAuthToken(user)
   res.send(token)
+
     await user.save()
     await user1.save()
+
 })
 userRouter.post("/login", async (req, res) => {
     const password = req.body.password.toString()
