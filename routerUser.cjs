@@ -92,16 +92,17 @@ userRouter.put("/signup/:_id", async (req, res) => {
   if(!user) return res.status(400).send("error")
     const uploaded = await cloudinary.uploader.upload(image, {
       upload_preset: "unsigned_upload",
-      public_id: "user_image",
-      allowed_formats: ["png", "jpg", "jpeg", "svg", "webp"] 
+      public_id: `${req.body.username}`,
+      allowed_formats: ["png", "jpg", "jpeg", "svg", "webp"],
+      overwrite:true, invalidate: true
     })
   const salt = await bcrypt.genSalt(10)
-
+    const imageUser = uploaded.url
    const hashPassword = await bcrypt.hash(req.body.password, salt)
-     const product = await modelProduct.findByIdAndUpdate({userId: req.body._id}, {
+     const product = await modelProduct.updateMany({userId: req.body._id}, {
        $set: {
          username: req.body.username,
-         userImage: uploaded.url,
+         userImage: imageUser,
        }
      })
      console.log(product)
@@ -109,7 +110,7 @@ userRouter.put("/signup/:_id", async (req, res) => {
        {_id: req.body._id},
       {
         $set: {
-          image: uploaded.url,
+          image: imageUser,
           username: req.body.username,
           desc: req.body.desc,
           password: hashPassword,

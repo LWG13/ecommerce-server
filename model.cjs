@@ -10,6 +10,7 @@ const Schema = new mongoose.Schema({
   userId: String,
   username: String,
   userImage: String,
+  createdAt: { type: Date, default: Date.now}
 })
 
 const productData = mongoose.model("shop", Schema)
