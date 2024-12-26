@@ -26,7 +26,7 @@ productRouter.get("/:_id", async (req, res) => {
   }
 })
 productRouter.post("/search/product", async (req, res) => {
-  const title  = req.body.title
+  const title  = req.body.title  
   const searchProduct = await modelProduct.find({ title: { $regex: title, $options: "i"}})
    res.send(searchProduct)
 })
