@@ -26,10 +26,23 @@ productRouter.get("/:_id", async (req, res) => {
   }
 })
 productRouter.post("/search/product", async (req, res) => {
-  const title  = req.body.title  
-  const searchProduct = await modelProduct.find({ title: { $regex: title, $options: "i"}})
-   res.send(searchProduct)
-})
+  try {
+    const title  = req.body.title;
+
+    if (!title || typeof title !== "string") {
+      return res.status(400).send({ error: "Invalid title provided" });
+    }
+
+    const searchProduct = await modelProduct.find({
+      title: { $regex: title, $options: "i" }
+    });
+
+    res.status(200).send(searchProduct);
+  } catch (error) {
+    console.error("Error searching for products:", error);
+    res.status(500).send({ error: "Internal Server Error" });
+  }
+});
 productRouter.get("/category/:category", async (req, res) => {
   try{
     const page = req.query.limit || 0
