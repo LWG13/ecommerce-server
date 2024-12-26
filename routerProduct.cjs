@@ -25,6 +25,11 @@ productRouter.get("/:_id", async (req, res) => {
     console.log(err)
   }
 })
+productRouter.post("/search/product", async (req, res) => {
+  const title  = req.body.title
+  const searchProduct = await modelProduct.find({ title: { $regex: title, $options: "i"}})
+   res.send(searchProduct)
+})
 productRouter.get("/category/:category", async (req, res) => {
   try{
     const page = req.query.limit || 0
