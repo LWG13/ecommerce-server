@@ -57,7 +57,7 @@ productRouter.get("/category/:category", async (req, res) => {
 productRouter.post("/create", async (req, res) => {
   const uploaded = await cloudinary.uploader.upload(req.body.image, {
       upload_preset: "unsigned_upload",
-      public_id: `${req.body._id}`,
+      public_id: Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000,
       allowed_formats: ["png", "jpg", "jpeg", "svg", "webp"],
     overwrite: true
     })
@@ -87,7 +87,7 @@ productRouter.put("/create/:_id", async (req, res) => {
     // Upload ảnh lên Cloudinary
     const uploaded = await cloudinary.uploader.upload(req.body.image, {
       upload_preset: "unsigned_upload",
-      public_id: `${req.body._id}`,
+      public_id: Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000,
       allowed_formats: ["png", "jpg", "jpeg", "svg", "webp"],
       overwrite: true
     });
