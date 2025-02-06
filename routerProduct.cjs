@@ -9,9 +9,14 @@ productRouter.get("/", async (req, res) => {
   try{
   const page = req.query.limit || 0
   const limitProduct = 20
-  modelProduct.find().skip(page * limitProduct).limit(limitProduct).then(product => {
+  const samples = await modelProduct.aggregate([
+      { $sample: { size: 20 } }
+    ]);
+
+    // Áp dụng skip và limit trong ứng dụng
+    const product = samples.slice(page, page + limitProduct);
+
     res.json(product)
-  })
  } catch(err) {
    console.log(err)
   }
