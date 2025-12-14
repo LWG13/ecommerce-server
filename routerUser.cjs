@@ -57,7 +57,7 @@ userRouter.post("/signup", async (req, res) => {
     if(email) {
       return res.status(400).send("Email already exits..")
     }
-  const salt = await bcrypt.genSalt(10)
+  const salt = await bcrypt.genSalt(12)
   const hashPassword = await bcrypt.hash(req.body.password, salt)
      const user = new modelUser({
       username: req.body.username,
@@ -96,7 +96,7 @@ userRouter.put("/signup/:_id", async (req, res) => {
       allowed_formats: ["png", "jpg", "jpeg", "svg", "webp"],
       overwrite:true, invalidate: true
     })
-  const salt = await bcrypt.genSalt(10)
+  const salt = await bcrypt.genSalt(12)
     const imageUser = uploaded.url
    const hashPassword = await bcrypt.hash(req.body.password, salt)
      const product = await modelProduct.updateMany({userId: req.body._id}, {
