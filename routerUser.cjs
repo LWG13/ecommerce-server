@@ -96,9 +96,7 @@ userRouter.put("/signup/:_id", async (req, res) => {
       allowed_formats: ["png", "jpg", "jpeg", "svg", "webp"],
       overwrite:true, invalidate: true
     })
-  const salt = await bcrypt.genSalt(12)
     const imageUser = uploaded.url
-   const hashPassword = await bcrypt.hash(req.body.password, salt)
      const product = await modelProduct.updateMany({userId: req.body._id}, {
        $set: {
          username: req.body.username,
@@ -113,7 +111,6 @@ userRouter.put("/signup/:_id", async (req, res) => {
           image: imageUser,
           username: req.body.username,
           desc: req.body.desc,
-          password: hashPassword,
           email: req.body.email,
           phoneNumber: req.body.phoneNumber
         }
@@ -123,7 +120,6 @@ userRouter.put("/signup/:_id", async (req, res) => {
     user.image = uploaded.url
     user.username = req.body.username
     user.email = user1.email
-     user.password = hashPassword
       user.phoneNumber = req.body.phoneNumber
        user.desc = req.body.desc
        user._id = req.body._id
