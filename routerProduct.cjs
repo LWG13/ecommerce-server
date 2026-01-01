@@ -21,6 +21,27 @@ productRouter.get("/", async (req, res) => {
    console.log(err)
   }
 })
+productRouter.get("/products/getSearch", async (req, res) => {
+  try {
+    const { search } = req.query;
+
+    let filter = {};
+
+    if (search && typeof search === "string" && search.trim() !== "") {
+      filter.title = {
+        $regex: search,
+        $options: "i",
+      };
+    }
+
+    const products = await modelProduct.find(filter);
+
+    res.status(200).json(products);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 productRouter.get("/:_id", async (req, res) => {
   try{
     modelProduct.findOne({_id: req.params._id}).lean().then(product => {
