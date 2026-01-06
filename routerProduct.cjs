@@ -26,19 +26,13 @@ productRouter.get("/category/mobile/:category", async (req, res) => {
     const page = Number(req.query.page) || 0;
     const limit = 10;
 
-    const [products, total] = await Promise.all([
-      modelProduct
-        .find({ category: req.params.category })
-        .skip(page * limit)
-        .limit(limit),
-      modelProduct.countDocuments({ category: req.params.category }),
-    ]);
+    const data = await modelProduct.find({ category: req.params.category }).skip(page * limit).limit(limit)
+     
+   const total = await  modelProduct.countDocuments({ category: req.params.category })
 
     res.json({
-      products,
-      total,
-      page,
-      limit,
+      data,
+      total
     });
   } catch (err) {
     console.error(err);
