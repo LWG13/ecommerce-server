@@ -24,7 +24,7 @@ productRouter.get("/", async (req, res) => {
 productRouter.get("/category/mobile/:category", async (req, res) => {
   try {
     const page = Number(req.query.page) || 0;
-    const limit = 20;
+    const limit = 10;
 
     const [products, total] = await Promise.all([
       modelProduct
@@ -35,7 +35,7 @@ productRouter.get("/category/mobile/:category", async (req, res) => {
     ]);
 
     res.json({
-      data: products,
+      products,
       total,
       page,
       limit,
